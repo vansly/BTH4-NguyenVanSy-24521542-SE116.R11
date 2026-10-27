@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://bb1axnscuosow"]
+
+[ext_resource type="PackedScene" path="res://scenes/base_character.tscn" id="1_base"]
+[ext_resource type="Script" uid="uid://bg4vg20suohk0" path="res://scenes/enemies/crab/crab.gd" id="2_crab"]
+[ext_resource type="Texture2D" uid="uid://dsn80h3kc0ccy" path="res://assets/monsters/crab/crab_sprite_sheet.png" id="3_sheet"]
+[ext_resource type="AnimationLibrary" uid="uid://dml40swgv3gyb" path="res://scenes/enemies/crab/crab_anims.tres" id="4_anims"]
+[ext_resource type="Script" uid="uid://duxj7mcro525e" path="res://scenes/enemies/states/run.gd" id="5_run"]
+[ext_resource type="Script" uid="uid://cavrnd83h7ldu" path="res://scenes/enemies/states/hurt.gd" id="6_hurt"]
+[ext_resource type="Script" uid="uid://c4dbahumsabb" path="res://scenes/enemies/states/dead.gd" id="7_dead"]
+[ext_resource type="Script" uid="uid://bvv36o7f0oebf" path="res://scripts/hit_area_3d.gd" id="8_hit_area"]
+[ext_resource type="Script" uid="uid://coy8holsj103m" path="res://scripts/hurt_area_3d.gd" id="9_hurt_area"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hit"]
+size = Vector3(1.4, 1, 1.4)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hurt"]
+height = 1.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
+radius = 0.55
+height = 1.1
+
+[node name="Crab" unique_id=178462145 groups=["enemy"] instance=ExtResource("1_base")]
+collision_layer = 8
+script = ExtResource("2_crab")
+max_health = 2
+
+[node name="Sprite3D" parent="." index="0"]
+offset = Vector2(0, 12.5)
+texture = ExtResource("3_sheet")
+hframes = 3
+vframes = 5
+
+[node name="AnimationPlayer" parent="." index="1"]
+libraries/ = ExtResource("4_anims")
+
+[node name="FrontRayCast3D" type="RayCast3D" parent="Direction" index="0" unique_id=389839772]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+target_position = Vector3(0, 0, 1)
+
+[node name="DownRayCast3D" type="RayCast3D" parent="Direction" index="1" unique_id=1477949248]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.9)
+target_position = Vector3(0, -1.5, 0)
+
+[node name="HitArea3D" type="Area3D" parent="Direction" index="2" unique_id=417410731]
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("8_hit_area")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Direction/HitArea3D" index="0" unique_id=1086515465]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_hit")
+
+[node name="HurtArea3D" type="Area3D" parent="Direction" index="3" unique_id=1281509299]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("9_hurt_area")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Direction/HurtArea3D" index="0" unique_id=1988641449]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("CapsuleShape3D_hurt")
+
+[node name="CollisionShape3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+shape = SubResource("CapsuleShape3D_body")
+
+[node name="Run" type="Node" parent="States" index="0" unique_id=572054774]
+script = ExtResource("5_run")
+
+[node name="Hurt" type="Node" parent="States" index="1" unique_id=1609709816]
+script = ExtResource("6_hurt")
+
+[node name="Dead" type="Node" parent="States" index="2" unique_id=1479775188]
+script = ExtResource("7_dead")

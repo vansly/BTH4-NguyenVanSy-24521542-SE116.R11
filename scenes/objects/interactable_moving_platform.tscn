@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://bjroityodfeu3"]
+
+[ext_resource type="PackedScene" uid="uid://ca8aphb87hjep" path="res://scenes/objects/moving_platform.tscn" id="1_gfonn"]
+[ext_resource type="Script" uid="uid://dqscxan4tqoww" path="res://scenes/objects/interactable_moving_platform.gd" id="2_6lria"]
+[ext_resource type="Script" uid="uid://b2eobbyacfwr1" path="res://scripts/interactive_area_3d.gd" id="3_1bbtp"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1bbtp"]
+size = Vector3(4, 1, 4)
+
+[node name="MovingPlatform" unique_id=1649015684 instance=ExtResource("1_gfonn")]
+script = ExtResource("2_6lria")
+offset = Vector3(0, 4, 0)
+max_speed = 2.0
+acceleration = 2.0
+wait_time = 1.0
+
+[node name="InteractiveArea3D" type="Area3D" parent="." index="2" unique_id=1515678121]
+script = ExtResource("3_1bbtp")
+metadata/_custom_type_script = "uid://b2eobbyacfwr1"
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="InteractiveArea3D" index="0" unique_id=903057936]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_1bbtp")

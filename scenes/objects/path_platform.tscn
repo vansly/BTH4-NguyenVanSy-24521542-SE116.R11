@@ -1,0 +1,89 @@
+[gd_scene format=3 uid="uid://bxagbc5cilvmk"]
+
+[ext_resource type="Texture2D" uid="uid://banh2b12y26x4" path="res://assets/sprites/moving_platform/moving_platform.png" id="1_61soj"]
+
+[sub_resource type="Curve3D" id="Curve3D_61soj"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, -1.5, 0, 0, 0, 0, 0, 0, 0, 8, -4, 0),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_marny"]
+albedo_texture = ExtResource("1_61soj")
+uv1_scale = Vector3(0.25, 2, 2)
+uv1_offset = Vector3(0.5, 0, 0)
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_uuawj"]
+material = SubResource("StandardMaterial3D_marny")
+size = Vector3(4, 0.5, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_y6umr"]
+size = Vector3(4, 0.5, 4)
+
+[sub_resource type="Animation" id="Animation_uuawj"]
+length = 1.2666667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Path3D/PathFollow3D:progress_ratio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_61soj"]
+resource_name = "move"
+length = 5.0
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Path3D/PathFollow3D:progress_ratio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 4.5, 5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.0, 1.0, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_uuawj"]
+_data = {
+&"RESET": SubResource("Animation_uuawj"),
+&"move": SubResource("Animation_61soj")
+}
+
+[node name="PathPlatform" type="Node3D" unique_id=1945973839]
+
+[node name="Path3D" type="Path3D" parent="." unique_id=378850401]
+curve = SubResource("Curve3D_61soj")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D" unique_id=775492943]
+rotation_mode = 0
+loop = false
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Path3D/PathFollow3D" unique_id=2102080054]
+remote_path = NodePath("../../../Platform")
+update_rotation = false
+update_scale = false
+
+[node name="Platform" type="AnimatableBody3D" parent="." unique_id=1629536067]
+collision_mask = 0
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Platform" unique_id=1577659495]
+mesh = SubResource("BoxMesh_uuawj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Platform" unique_id=2001120335]
+shape = SubResource("BoxShape3D_y6umr")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1134068245]
+callback_mode_process = 0
+libraries/ = SubResource("AnimationLibrary_uuawj")
+autoplay = &"move"

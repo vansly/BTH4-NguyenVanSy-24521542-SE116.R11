@@ -1,0 +1,125 @@
+[gd_scene format=3 uid="uid://culk4xbghhuld"]
+
+[ext_resource type="Script" uid="uid://n6b1ny1jfxuu" path="res://levels/door/door.gd" id="1_51p5e"]
+[ext_resource type="Texture2D" uid="uid://c1ilwd5wqggpq" path="res://assets/sprites/door/closing.png" id="1_gxcpb"]
+[ext_resource type="Script" uid="uid://b2eobbyacfwr1" path="res://scripts/interactive_area_3d.gd" id="1_vsts4"]
+[ext_resource type="Texture2D" uid="uid://dvxpyrrbvbfqo" path="res://assets/sprites/door/idle.png" id="2_u70jo"]
+[ext_resource type="Texture2D" uid="uid://ca8bjsnpsw6hy" path="res://assets/sprites/door/opening.png" id="3_0w423"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u70jo"]
+atlas = ExtResource("1_gxcpb")
+region = Rect2(0, 0, 46, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0w423"]
+atlas = ExtResource("1_gxcpb")
+region = Rect2(46, 0, 46, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_51p5e"]
+atlas = ExtResource("1_gxcpb")
+region = Rect2(92, 0, 46, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wi0yu"]
+atlas = ExtResource("2_u70jo")
+region = Rect2(0, 0, 46, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iu10j"]
+atlas = ExtResource("3_0w423")
+region = Rect2(0, 0, 46, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j3cwg"]
+atlas = ExtResource("3_0w423")
+region = Rect2(46, 0, 46, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b8ksc"]
+atlas = ExtResource("3_0w423")
+region = Rect2(92, 0, 46, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2e5mw"]
+atlas = ExtResource("3_0w423")
+region = Rect2(138, 0, 46, 56)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_43ykg"]
+atlas = ExtResource("3_0w423")
+region = Rect2(184, 0, 46, 56)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vsts4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u70jo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0w423")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_51p5e")
+}],
+"loop": 0,
+"name": &"closing",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wi0yu")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iu10j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j3cwg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b8ksc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2e5mw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_43ykg")
+}],
+"loop": 0,
+"name": &"opening",
+"speed": 10.0
+}]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vsts4"]
+size = Vector3(2.8, 3.5, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gxcpb"]
+size = Vector3(2.4, 2.4, 1.6)
+
+[node name="Door" type="Node3D" unique_id=1157135191]
+script = ExtResource("1_51p5e")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="." unique_id=1986116991]
+offset = Vector2(0, 28)
+pixel_size = 0.0625
+billboard = 1
+shaded = true
+alpha_cut = 1
+texture_filter = 0
+sprite_frames = SubResource("SpriteFrames_vsts4")
+animation = &"idle"
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1893056603]
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1407701151]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+shape = SubResource("BoxShape3D_vsts4")
+
+[node name="InteractiveArea3D" type="Area3D" parent="." unique_id=765450962]
+script = ExtResource("1_vsts4")
+metadata/_custom_type_script = "uid://b2eobbyacfwr1"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractiveArea3D" unique_id=1063035682]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+shape = SubResource("BoxShape3D_gxcpb")
+
+[node name="Spawn" type="Marker3D" parent="." unique_id=1089678952]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 3.2)

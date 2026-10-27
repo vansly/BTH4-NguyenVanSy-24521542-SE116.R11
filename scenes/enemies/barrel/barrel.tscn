@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://bg8d2alrvsrrq"]
+
+[ext_resource type="PackedScene" path="res://scenes/base_character.tscn" id="1_base"]
+[ext_resource type="Script" uid="uid://cvb1n5f0gcefv" path="res://scenes/enemies/barrel/barrel.gd" id="2_barrel"]
+[ext_resource type="Texture2D" uid="uid://8xv3tso56oou" path="res://assets/monsters/barrel/barrel_sprite_sheet.png" id="3_sheet"]
+[ext_resource type="AnimationLibrary" uid="uid://s0xkp2t7er6t" path="res://scenes/enemies/barrel/barrel_anims.tres" id="4_anims"]
+[ext_resource type="Script" uid="uid://bur4thfwp8wyk" path="res://scenes/enemies/barrel/states/idle.gd" id="5_idle"]
+[ext_resource type="Script" uid="uid://dy5c743ac6bwt" path="res://scenes/enemies/barrel/states/shoot.gd" id="6_shoot"]
+[ext_resource type="Script" uid="uid://cavrnd83h7ldu" path="res://scenes/enemies/states/hurt.gd" id="7_hurt"]
+[ext_resource type="Script" uid="uid://c4dbahumsabb" path="res://scenes/enemies/states/dead.gd" id="8_dead"]
+[ext_resource type="Script" uid="uid://coy8holsj103m" path="res://scripts/hurt_area_3d.gd" id="9_hurt_area"]
+[ext_resource type="Script" uid="uid://bec57758p7ipw" path="res://scripts/node3d_factory.gd" id="10_factory"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/barrel/barrel_bullet.tscn" id="11_bullet"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hurt"]
+height = 1.4
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
+radius = 0.55
+height = 1.5
+
+[node name="Barrel" unique_id=1647951872 groups=["enemy"] instance=ExtResource("1_base")]
+collision_layer = 8
+script = ExtResource("2_barrel")
+bullet_speed = 12.0
+movement_speed = 0.0
+
+[node name="Sprite3D" parent="." index="0"]
+offset = Vector2(0, 15.5)
+texture = ExtResource("3_sheet")
+hframes = 3
+vframes = 9
+
+[node name="AnimationPlayer" parent="." index="1"]
+libraries/ = ExtResource("4_anims")
+
+[node name="BulletFactory" type="Marker3D" parent="Direction" index="0" unique_id=1998227969]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0.8)
+script = ExtResource("10_factory")
+product_packed_scene = ExtResource("11_bullet")
+target_container_name = &"Bullets"
+
+[node name="HurtArea3D" type="Area3D" parent="Direction" index="1" unique_id=517047224]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("9_hurt_area")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Direction/HurtArea3D" index="0" unique_id=807558415]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("CapsuleShape3D_hurt")
+
+[node name="CollisionShape3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("CapsuleShape3D_body")
+
+[node name="Idle" type="Node" parent="States" index="0" unique_id=530227634]
+script = ExtResource("5_idle")
+
+[node name="Shoot" type="Node" parent="States" index="1" unique_id=1066515099]
+script = ExtResource("6_shoot")
+
+[node name="Hurt" type="Node" parent="States" index="2" unique_id=800364545]
+script = ExtResource("7_hurt")
+
+[node name="Dead" type="Node" parent="States" index="3" unique_id=200999221]
+script = ExtResource("8_dead")
