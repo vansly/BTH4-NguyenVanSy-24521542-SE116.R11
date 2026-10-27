@@ -1,8 +1,8 @@
 extends Node3D
 
 ## A platform that rides its Path3D only while the fox stands on it AND holds `interact`. Let go,
-## or step off, and it eases to a stop. Next time it heads the other way, so one ride goes from the
-## start of the path to the end, and the next ride comes back. Shape the route by editing the curve
+## or step off, and it eases to a stop. It also eases into each end of the path, and waits there
+## until the key is let go; the next ride goes the other way. Shape the route by editing the curve
 ## of the Path3D child in the editor.
 
 ## Top speed along the path, in meters per second.
@@ -19,20 +19,33 @@ extends Node3D
 
 var _direction := 1.0
 var _speed := 0.0
+## Set on arriving at an end: the fox has to let go of the key before the platform sets off again,
+## otherwise a held key would send it straight back.
+var _must_release := false
 
 
 ## Moves in _physics_process, not _process: the platform is an AnimatableBody3D, which only carries
 ## the fox correctly when it moves with the physics step.
 func _physics_process(delta: float) -> void:
-	var wanted := speed if _rider_wants_to_move() else 0.0
+	var riding := _rider_wants_to_move()
+	if _must_release:
+		_must_release = riding
+		riding = false
+	var length := _path.curve.get_baked_length()
+	var remaining := length - _follow.progress if _direction > 0.0 else _follow.progress
+	# sqrt(2 * a * d) is the fastest speed from which it can still stop within d meters, so the
+	# platform eases into the end of the path instead of hitting it at full speed.
+	var wanted := minf(speed, sqrt(2.0 * acceleration * remaining)) if riding else 0.0
 	_speed = move_toward(_speed, wanted, acceleration * delta)
 	if _speed == 0.0:
 		return
-	var length := _path.curve.get_baked_length()
-	_follow.progress = clampf(_follow.progress + _direction * _speed * delta, 0.0, length)
-	if (_direction > 0.0 and _follow.progress >= length) or (_direction < 0.0 and _follow.progress <= 0.0):
+	var step := minf(_speed * delta, remaining)
+	_follow.progress += _direction * step
+	if remaining - step < 0.01:
+		_follow.progress = length if _direction > 0.0 else 0.0
 		_direction = -_direction    # reached an end: the next ride goes back
 		_speed = 0.0
+		_must_release = true
 
 
 ## Same rule as InteractiveArea3D: the key counts for a body that can interact right now (Player.can_interact(): alive, not talking).

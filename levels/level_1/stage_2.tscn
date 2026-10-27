@@ -9,9 +9,9 @@
 [ext_resource type="PackedScene" path="res://levels/objects/kill_zone/kill_zone.tscn" id="7_fc8l5"]
 [ext_resource type="PackedScene" path="res://levels/objects/enemy_zone/enemy_zone.tscn" id="8_8rgjp"]
 [ext_resource type="Script" uid="uid://ddrqk72ngkeg7" path="res://scripts/grid_pathfinder.gd" id="9_ognp5"]
-[ext_resource type="PackedScene" uid="uid://ca8aphb87hjep" path="res://scenes/objects/moving_platform.tscn" id="10_mg8ag"]
 [ext_resource type="PackedScene" uid="uid://bxagbc5cilvmk" path="res://scenes/objects/path_platform.tscn" id="11_w0g6r"]
 [ext_resource type="PackedScene" uid="uid://culk4xbghhuld" path="res://levels/door/door.tscn" id="12_h8r88"]
+[ext_resource type="PackedScene" uid="uid://c287tsv28hmof" path="res://scenes/objects/interact_platform.tscn" id="12_s2c0g"]
 [ext_resource type="PackedScene" uid="uid://crb65yxteq68h" path="res://levels/objects/checkpoint/checkpoint.tscn" id="13_s2c0g"]
 
 [sub_resource type="Environment" id="Environment_wnaro"]
@@ -19,6 +19,13 @@ ambient_light_source = 3
 ambient_light_color = Color(0.95596343, 0.9559633, 0.95596343, 1)
 ambient_light_sky_contribution = 0.8
 ambient_light_energy = 0.56
+
+[sub_resource type="Curve3D" id="Curve3D_fc8l5"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
 
 [sub_resource type="Curve3D" id="Curve3D_ul400"]
 _data = {
@@ -99,12 +106,14 @@ id = "dock"
 
 [node name="Platforms" type="Node3D" parent="." unique_id=872446399]
 
-[node name="MovingPlatform" parent="Platforms" unique_id=1649015684 instance=ExtResource("10_mg8ag")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0.8, 0)
-offset = Vector3(0, 4, 0)
-max_speed = 2.0
-acceleration = 2.0
-wait_time = 1.0
+[node name="InteractPlatform" parent="Platforms" unique_id=1479936805 instance=ExtResource("12_s2c0g")]
+
+[node name="Path3D" parent="Platforms/InteractPlatform" index="0" unique_id=1354830809]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0.9, 5)
+curve = SubResource("Curve3D_fc8l5")
+
+[node name="Platform" parent="Platforms/InteractPlatform" index="1" unique_id=582160832]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0.9, 5)
 
 [node name="PathPlatform" parent="Platforms" unique_id=1945973839 instance=ExtResource("11_w0g6r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 4.75, 8)
@@ -121,5 +130,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29, 1, 8)
 [node name="Path3D" parent="Platforms/PathPlatform2" index="0" unique_id=378850401]
 curve = SubResource("Curve3D_s2c0g")
 
+[editable path="Platforms/InteractPlatform"]
 [editable path="Platforms/PathPlatform"]
 [editable path="Platforms/PathPlatform2"]

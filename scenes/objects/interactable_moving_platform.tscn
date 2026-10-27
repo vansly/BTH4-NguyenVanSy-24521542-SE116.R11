@@ -1,23 +1,39 @@
 [gd_scene format=3 uid="uid://bjroityodfeu3"]
 
-[ext_resource type="PackedScene" uid="uid://ca8aphb87hjep" path="res://scenes/objects/moving_platform.tscn" id="1_gfonn"]
-[ext_resource type="Script" uid="uid://dqscxan4tqoww" path="res://scenes/objects/interactable_moving_platform.gd" id="2_6lria"]
+[ext_resource type="Script" uid="uid://b6oo6ysev4ry6" path="res://scenes/objects/interact_platform.gd" id="1_1bbtp"]
+[ext_resource type="Texture2D" uid="uid://banh2b12y26x4" path="res://assets/sprites/moving_platform/moving_platform.png" id="2_1bbtp"]
 [ext_resource type="Script" uid="uid://b2eobbyacfwr1" path="res://scripts/interactive_area_3d.gd" id="3_1bbtp"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_marny"]
+albedo_texture = ExtResource("2_1bbtp")
+uv1_scale = Vector3(0.25, 2, 2)
+uv1_offset = Vector3(0.5, 0, 0)
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_marny"]
+material = SubResource("StandardMaterial3D_marny")
+size = Vector3(4, 0.5, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gfj5l"]
+size = Vector3(4, 0.5, 4)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1bbtp"]
 size = Vector3(4, 1, 4)
 
-[node name="MovingPlatform" unique_id=1649015684 instance=ExtResource("1_gfonn")]
-script = ExtResource("2_6lria")
-offset = Vector3(0, 4, 0)
-max_speed = 2.0
-acceleration = 2.0
-wait_time = 1.0
+[node name="InteractableMovingPlatform" type="AnimatableBody3D" unique_id=1649015684]
+collision_mask = 0
+script = ExtResource("1_1bbtp")
 
-[node name="InteractiveArea3D" type="Area3D" parent="." index="2" unique_id=1515678121]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=53158203]
+mesh = SubResource("BoxMesh_marny")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1903634890]
+shape = SubResource("BoxShape3D_gfj5l")
+
+[node name="InteractiveArea3D" type="Area3D" parent="." unique_id=1515678121]
 script = ExtResource("3_1bbtp")
 metadata/_custom_type_script = "uid://b2eobbyacfwr1"
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="InteractiveArea3D" index="0" unique_id=903057936]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="InteractiveArea3D" unique_id=903057936]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_1bbtp")
